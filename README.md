@@ -9,11 +9,11 @@ Eduardo Germano da Silva, Luis Augusto Dias Knob, Juliano Araujo Wickboldt, Luci
 > [!NOTE]
 > This post-publication release is part of an ongoing effort to improve the reproducibility and verifiability of my research. For this paper, I am making the source code and experimental configurations publicly available. I plan to gradually release artifacts from more of my research projects over time.
 >
-> Some files needed to rerun the experiments were unavailable. I used GPT-6.2 Sol to help reconstruct the experiment runner, the ten-host Mininet scenario, and a synthetic Modbus/TCP workload on the `reproduction` branch. I also used it to adapt Mininet to work with the interface names reported by newer Linux kernels.
+> Some files needed to rerun the experiments were unavailable. I used GPT-6.2 Sol to help reconstruct the experiment runner, the ten-host Mininet scenario, and a synthetic Modbus/TCP workload on the `reproduction` branch. I also used it to adapt Mininet to work with the interface names reported by newer Linux kernels. I also used GPT-6.2 Sol to help fix the forwarding of the packet that triggers a route change.
 
 ## Source and Scenario
 
-- [POX controller](code/graphcontrol.py)
+- [POX controller with the route-change fix](code/graphcontrol.py)
 - [Mininet topology and configuration](code/topo-mesh.py)
 - The [original source ZIP](archive/im2015-original-source.zip) preserves the source bytes and the modification times recorded on the surviving copies. [Checksums](MANIFEST.sha256)
 
@@ -28,7 +28,7 @@ Nine substations each send 512 bytes of register data to the master every 15 sec
 | Case | Routing |
 | --- | --- |
 | A | POX learning switch with spanning tree |
-| C | Archived multipath controller with a 10-second hard timeout |
+| C | Multipath with route-change forwarding fixed and a 10-second hard timeout |
 
 The default pair runs for 120 seconds per case on unshaped virtual links. The paper specifies 600 seconds and 10 Gb/s links. The baseline uses POX's startup hold-down so the spanning tree can settle before forwarding flooded traffic.
 
@@ -56,13 +56,28 @@ python3 scripts/analyze.py runs/modbus-pilot/baseline runs/modbus-pilot/multipat
 
 The analyzer reports the largest share of each substation's register data and TCP traffic visible on any one monitored link. Repeated transmissions of the same register data count once per link. The analyzer counts controller-link frames and OpenFlow `Packet-In` messages separately.
 
+These results use the archived controller on `reproduction`.
+
 | Measurement | A · Single path | C · Multipath |
 | --- | ---: | ---: |
 | Completed Modbus/TCP reports | 72/72 | 72/72 |
 | Register data visible on the busiest link per substation | 100% | 50% |
 | TCP packets visible on the busiest link per substation | 100% | 72.81–75.22% |
 
-The [pilot results](expected/pilot.json) include the counts for each substation and link. Table II of the paper reports 75% TCP packet exposure on the busiest link with multipath. The pilot supports the paper’s conclusion that rotating paths reduces what a single link can see.
+The [pilot results](expected/pilot.json) include the counts for each substation and link. Table II of the paper reports 75% TCP packet exposure on the busiest link with multipath.
+
+### Route-change forwarding
+
+When an existing route expires, the controller includes the packet that triggered the change when it installs the next rule. This lets the switch forward that packet without waiting for a TCP retransmission. Initial path setup still follows the archived controller.
+
+| Multipath measurement | Archived controller | Route-change fix |
+| --- | ---: | ---: |
+| Completed reports | 72/72 | 72/72 |
+| Median time to complete a report | 1.0474 s | 0.0259 s |
+| Register data visible on the busiest link per substation | 50% | 50% |
+| TCP packets visible on the busiest link per substation | 72.81–75.22% | 72.81–75.44% |
+
+Both multipath runs lasted 120 seconds and used the same Modbus/TCP workload. [Fixed pilot results](expected/pilot-fixed.json)
 
 ## Citation
 

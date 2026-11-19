@@ -1,0 +1,216 @@
+[
+  {
+    "acknowledged_reports": 72,
+    "all_tcp_exposure": {
+      "2": {
+        "by_link": {
+          "link-s2": 84,
+          "link-s3": 0,
+          "link-s6": 0,
+          "link-s7": 30,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 73.68,
+        "packets": 114
+      },
+      "3": {
+        "by_link": {
+          "link-s2": 0,
+          "link-s3": 83,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 31
+        },
+        "max_exposure_pct": 72.81,
+        "packets": 114
+      },
+      "4": {
+        "by_link": {
+          "link-s2": 83,
+          "link-s3": 29,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 74.11,
+        "packets": 112
+      },
+      "5": {
+        "by_link": {
+          "link-s2": 86,
+          "link-s3": 28,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 75.44,
+        "packets": 114
+      },
+      "6": {
+        "by_link": {
+          "link-s2": 30,
+          "link-s3": 0,
+          "link-s6": 83,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 73.45,
+        "packets": 113
+      },
+      "7": {
+        "by_link": {
+          "link-s2": 29,
+          "link-s3": 0,
+          "link-s6": 0,
+          "link-s7": 84,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 74.34,
+        "packets": 113
+      },
+      "8": {
+        "by_link": {
+          "link-s2": 0,
+          "link-s3": 31,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 83
+        },
+        "max_exposure_pct": 72.81,
+        "packets": 114
+      },
+      "9": {
+        "by_link": {
+          "link-s2": 29,
+          "link-s3": 0,
+          "link-s6": 84,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 74.34,
+        "packets": 113
+      },
+      "10": {
+        "by_link": {
+          "link-s2": 31,
+          "link-s3": 0,
+          "link-s6": 85,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 73.28,
+        "packets": 116
+      }
+    },
+    "control_kbps": 58.29,
+    "cycles": 8,
+    "duration_seconds": 120,
+    "frames_per_second": 72.25,
+    "median_report_seconds": 0.0259,
+    "packet_ins_per_second": 20.04,
+    "received_reports": 72,
+    "register_data_exposure": {
+      "2": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 0,
+          "link-s6": 0,
+          "link-s7": 2048,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "3": {
+        "by_link": {
+          "link-s2": 0,
+          "link-s3": 2048,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 2048
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "4": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 2048,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "5": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 2048,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "6": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 0,
+          "link-s6": 2048,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "7": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 0,
+          "link-s6": 0,
+          "link-s7": 2048,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "8": {
+        "by_link": {
+          "link-s2": 0,
+          "link-s3": 2048,
+          "link-s6": 0,
+          "link-s7": 0,
+          "link-s8": 2048
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "9": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 0,
+          "link-s6": 2048,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      },
+      "10": {
+        "by_link": {
+          "link-s2": 2048,
+          "link-s3": 0,
+          "link-s6": 2048,
+          "link-s7": 0,
+          "link-s8": 0
+        },
+        "max_exposure_pct": 50.0,
+        "register_bytes": 4096
+      }
+    },
+    "scenario": "multipath",
+    "senders": 9
+  }
+]

@@ -60,10 +60,11 @@ def isRouteCalculated(src, dst):
             return grupo
     return None
 
-def install_rule(sw, match, out_port, hard_timeout):
+def install_rule(sw, match, out_port, hard_timeout, packet_in=None):
     msg = of.ofp_flow_mod()
     msg.match = match
     msg.hard_timeout = hard_timeout
+    msg.data = packet_in
     msg.actions.append(of.ofp_action_output(port = out_port))
     event = core.openflow.getConnection(sw)
     event.send(msg)
@@ -179,7 +180,7 @@ def _handle_PacketIn(event):
                 else:
                     groups.remove(calculated)
                     print(calculated['paths'][calculated['num']])
-                    install_rule(calculated['paths'][calculated['num']][0], match, calculated['paths'][calculated['num']][1], FLOW_HARD_TIMEOUT)
+                    install_rule(calculated['paths'][calculated['num']][0], match, calculated['paths'][calculated['num']][1], FLOW_HARD_TIMEOUT, packet_in)
                     calculated['timestamp'] = time.time()
                     if calculated['num'] == 0:
                         num = 1
