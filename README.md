@@ -17,7 +17,52 @@ Eduardo Germano da Silva, Luis Augusto Dias Knob, Juliano Araujo Wickboldt, Luci
 - [Mininet topology and configuration](code/topo-mesh.py)
 - The [original source ZIP](archive/im2015-original-source.zip) preserves the source bytes and the modification times recorded on the surviving copies. [Checksums](MANIFEST.sha256)
 
-The `reproduction` branch contains a runnable scenario based on the paper and instructions for generating fresh results.
+## Reproduction
+
+The results below come from fresh runs of the reconstructed experiment.
+
+### Scenario
+
+Nine substations each send 512 bytes of register data to the master every 15 seconds. Each report uses one TCP connection and three Modbus/TCP Write Multiple Registers requests so each request fits within the protocol limits. The [scenario configuration](data/scenario.json) defines the 17 switch links and the five links monitored next to the master station.
+
+| Case | Routing |
+| --- | --- |
+| A | POX learning switch with spanning tree |
+| C | Archived multipath controller with a 10-second hard timeout |
+
+The default pair runs for 120 seconds per case on unshaped virtual links. The paper specifies 600 seconds and 10 Gb/s links. The baseline uses POX's startup hold-down so the spanning tree can settle before forwarding flooded traffic.
+
+### Settings and Execution
+
+Use a dedicated x86-64 Ubuntu 14.04 Linux guest with Python 2.7, `dpkg-deb`, `tcpdump`, `ip`, `tc`, and `flock`. The guest must support network namespaces, virtual Ethernet devices, and the Open vSwitch kernel datapath. An LXC guest with nesting enabled was used for validation.
+
+```sh
+bash scripts/fetch_dependencies.sh
+bash scripts/prepare.sh
+sudo bash scripts/run.sh modbus-pilot
+```
+
+The dependency scripts verify the [package checksums](data/dependencies.sha256) and extract the pinned Mininet, Open vSwitch, POX, and NetworkX versions locally. The only source compatibility change is a Mininet interface-name check. To prepare an offline guest, call `bash scripts/fetch_dependencies.sh /path/to/packages` on a connected Linux machine, transfer that directory, then call `bash scripts/prepare.sh /path/to/packages` in the guest.
+
+To run both cases for 600 seconds each, use `sudo bash scripts/run.sh modbus-full 40`. Each run directory contains packet captures, client logs, and received register data.
+
+### Results
+
+Copy the run directory to a machine with Python 3.10 or newer and run this command from the repository root.
+
+```sh
+python3 scripts/analyze.py runs/modbus-pilot/baseline runs/modbus-pilot/multipath
+```
+
+The analyzer reports the largest share of each substation's register data and TCP traffic visible on any one monitored link. Repeated transmissions of the same register data count once per link. The analyzer counts controller-link frames and OpenFlow `Packet-In` messages separately.
+
+| Measurement | A · Single path | C · Multipath |
+| --- | ---: | ---: |
+| Completed Modbus/TCP reports | 72/72 | 72/72 |
+| Register data visible on the busiest link per substation | 100% | 50% |
+| TCP packets visible on the busiest link per substation | 100% | 72.81–75.22% |
+
+The [pilot results](expected/pilot.json) include the counts for each substation and link. Table II of the paper reports 75% TCP packet exposure on the busiest link with multipath. The pilot supports the paper’s conclusion that rotating paths reduces what a single link can see.
 
 ## Citation
 
